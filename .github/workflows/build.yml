@@ -95,10 +95,10 @@ jobs:
           go install golang.org/x/mobile/cmd/gobind@latest
           gomobile init
       - name: Build Go Android library
-        working-directory: go-client
+        working-directory: go-client/mobilebridge
         run: |
-          mkdir -p ../android/app/libs
-          gomobile bind -target=android -javapkg=com.klihub.shoppinglist -o ../android/app/libs/mobilebridge.aar ./mobilebridge
+          mkdir -p ../../android/app/libs
+          gomobile bind -target=android -javapkg=com.klihub.shoppinglist -o ../../android/app/libs/mobilebridge.aar .
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
