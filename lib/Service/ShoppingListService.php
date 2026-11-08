@@ -24,7 +24,7 @@ final class ShoppingListService {
     }
 
     private function now(): string {
-        return gmdate('Y-m-d\\TH:i:s\\Z');
+        return gmdate('Y-m-d\TH:i:s\Z');
     }
 
     private function touchList(int $listId): void {
@@ -85,7 +85,7 @@ final class ShoppingListService {
             ]);
             $memberQb->executeStatement();
             $this->db->commit();
-        } catch (\\Throwable $e) {
+        } catch (\Throwable $e) {
             $this->db->rollBack();
             throw $e;
         }
@@ -119,7 +119,7 @@ final class ShoppingListService {
 
         $list = $qb->executeQuery()->fetchAssociative();
         if ($list === false) {
-            throw new \\OutOfBoundsException('Shopping list not found');
+            throw new \OutOfBoundsException('Shopping list not found');
         }
         return $list;
     }
@@ -127,7 +127,7 @@ final class ShoppingListService {
     private function requireOwner(int $listId): array {
         $list = $this->getList($listId);
         if ($list['owner'] !== $this->currentUserId()) {
-            throw new \\DomainException('Only the list owner can manage sharing or delete this list');
+            throw new \DomainException('Only the list owner can manage sharing or delete this list');
         }
         return $list;
     }
@@ -147,7 +147,7 @@ final class ShoppingListService {
                 ->where($qb->expr()->eq('id', $qb->createNamedParameter($listId)));
             $qb->executeStatement();
             $this->db->commit();
-        } catch (\\Throwable $e) {
+        } catch (\Throwable $e) {
             $this->db->rollBack();
             throw $e;
         }
@@ -175,11 +175,11 @@ final class ShoppingListService {
         $this->requireOwner($listId);
         $userId = trim($userId);
         if ($userId === '' || !$this->userManager->userExists($userId)) {
-            throw new \\InvalidArgumentException('No Nextcloud user exists with that user ID');
+            throw new \InvalidArgumentException('No Nextcloud user exists with that user ID');
         }
         $list = $this->getList($listId);
         if ($userId === $list['owner']) {
-            throw new \\InvalidArgumentException('The list owner is already a member');
+            throw new \InvalidArgumentException('The list owner is already a member');
         }
 
         $check = $this->db->getQueryBuilder();
@@ -188,7 +188,7 @@ final class ShoppingListService {
             ->where($check->expr()->eq('list_id', $check->createNamedParameter($listId)))
             ->andWhere($check->expr()->eq('user_id', $check->createNamedParameter($userId)));
         if ($check->executeQuery()->fetchOne() !== false) {
-            throw new \\DomainException('That user is already a member of this list');
+            throw new \DomainException('That user is already a member of this list');
         }
 
         $qb = $this->db->getQueryBuilder();
@@ -211,14 +211,14 @@ final class ShoppingListService {
     public function removeMember(int $listId, string $userId): void {
         $list = $this->requireOwner($listId);
         if ($userId === $list['owner']) {
-            throw new \\InvalidArgumentException('The list owner cannot be removed');
+            throw new \InvalidArgumentException('The list owner cannot be removed');
         }
         $qb = $this->db->getQueryBuilder();
         $qb->delete('shoppinglist_members')
             ->where($qb->expr()->eq('list_id', $qb->createNamedParameter($listId)))
             ->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)));
         if ($qb->executeStatement() === 0) {
-            throw new \\OutOfBoundsException('List member not found');
+            throw new \OutOfBoundsException('List member not found');
         }
         $this->touchList($listId);
     }
@@ -241,13 +241,13 @@ final class ShoppingListService {
         $this->getList($listId);
         $name = trim($name);
         if ($name === '' || mb_strlen($name) > 255) {
-            throw new \\InvalidArgumentException('Item name must contain 1–255 characters');
+            throw new \InvalidArgumentException('Item name must contain 1–255 characters');
         }
         $quantity = isset($data['quantity']) ? trim((string)$data['quantity']) : '1';
         $note = isset($data['note']) ? trim((string)$data['note']) : null;
         $category = isset($data['category']) ? trim((string)$data['category']) : null;
         if (mb_strlen($quantity) > 64 || ($category !== null && mb_strlen($category) > 64)) {
-            throw new \\InvalidArgumentException('Quantity and category must be at most 64 characters');
+            throw new \InvalidArgumentException('Quantity and category must be at most 64 characters');
         }
 
         $uid = $this->currentUserId();
@@ -280,7 +280,7 @@ final class ShoppingListService {
             ->andWhere($qb->expr()->eq('id', $qb->createNamedParameter($itemId)));
         $item = $qb->executeQuery()->fetchAssociative();
         if ($item === false) {
-            throw new \\OutOfBoundsException('Shopping list item not found');
+            throw new \OutOfBoundsException('Shopping list item not found');
         }
         return $item;
     }
@@ -292,7 +292,7 @@ final class ShoppingListService {
         $allowed = ['name', 'quantity', 'note', 'category', 'checked', 'sort_order'];
         $updates = array_intersect_key($data, array_flip($allowed));
         if ($updates === []) {
-            throw new \\InvalidArgumentException('No item fields were supplied');
+            throw new \InvalidArgumentException('No item fields were supplied');
         }
 
         $qb = $this->db->getQueryBuilder();
@@ -301,12 +301,12 @@ final class ShoppingListService {
             if ($field === 'name') {
                 $value = trim((string)$value);
                 if ($value === '' || mb_strlen($value) > 255) {
-                    throw new \\InvalidArgumentException('Item name must contain 1–255 characters');
+                    throw new \InvalidArgumentException('Item name must contain 1–255 characters');
                 }
             } elseif ($field === 'quantity') {
                 $value = $value === null ? null : trim((string)$value);
                 if ($value !== null && mb_strlen($value) > 64) {
-                    throw new \\InvalidArgumentException('Quantity must be at most 64 characters');
+                    throw new \InvalidArgumentException('Quantity must be at most 64 characters');
                 }
                 if ($value === '') {
                     $value = null;
@@ -314,7 +314,7 @@ final class ShoppingListService {
             } elseif ($field === 'note' || $field === 'category') {
                 $value = $value === null ? null : trim((string)$value);
                 if ($field === 'category' && $value !== null && mb_strlen($value) > 64) {
-                    throw new \\InvalidArgumentException('Category must be at most 64 characters');
+                    throw new \InvalidArgumentException('Category must be at most 64 characters');
                 }
                 if ($value === '') {
                     $value = null;
@@ -322,11 +322,11 @@ final class ShoppingListService {
             } elseif ($field === 'checked') {
                 $value = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
                 if ($value === null) {
-                    throw new \\InvalidArgumentException('Checked must be a boolean');
+                    throw new \InvalidArgumentException('Checked must be a boolean');
                 }
             } elseif ($field === 'sort_order') {
                 if (!is_numeric($value)) {
-                    throw new \\InvalidArgumentException('Sort order must be an integer');
+                    throw new \InvalidArgumentException('Sort order must be an integer');
                 }
                 $value = (int)$value;
             }
@@ -347,7 +347,7 @@ final class ShoppingListService {
             ->where($qb->expr()->eq('list_id', $qb->createNamedParameter($listId)))
             ->andWhere($qb->expr()->eq('id', $qb->createNamedParameter($itemId)));
         if ($qb->executeStatement() === 0) {
-            throw new \\OutOfBoundsException('Shopping list item not found');
+            throw new \OutOfBoundsException('Shopping list item not found');
         }
         $this->touchList($listId);
     }
