@@ -364,18 +364,20 @@ function App() {
                         <button className="check-control" type="button" onClick={() => toggleItem(item)} aria-label={checked ? `Uncheck ${item.name}` : `Check off ${item.name}`} disabled={busy}>
                           {checked ? '✓' : ''}
                         </button>
+                        <div className="item-actions">
+                          <button className="text-button" type="button" onClick={() => setEditingItem({ ...item })} aria-label={`Edit ${item.name}`}>Edit</button>
+                          <button className="text-button danger-text" type="button" onClick={() => deleteItem(item)} aria-label={`Delete ${item.name}`} disabled={busy}>×</button>
+                        </div>
                         <div className="item-content">
                           <span className="item-name">{item.name}</span>
                           {(item.quantity || item.category || item.note) && (
                             <span className="item-meta">
-                              {item.quantity && <span>{item.quantity}</span>}
+                              {item.quantity && <span className="item-quantity">{item.quantity}</span>}
                               {item.category && <span>{item.category}</span>}
                               {item.note && <span>{item.note}</span>}
                             </span>
                           )}
                         </div>
-                        <button className="text-button" type="button" onClick={() => setEditingItem({ ...item })} aria-label={`Edit ${item.name}`}>Edit</button>
-                        <button className="text-button danger-text" type="button" onClick={() => deleteItem(item)} aria-label={`Delete ${item.name}`} disabled={busy}>×</button>
                       </li>
                     );
                   })}
