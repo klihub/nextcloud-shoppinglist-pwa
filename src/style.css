@@ -86,12 +86,17 @@ input:focus-visible, button:focus-visible { outline: 2px solid var(--shopping-ac
 .item-primary-line .item-name { min-width: 0; }
 .row-control-spacer { flex: 0 0 28px; width: 28px; }
 .row-control-spacer + .row-control-spacer { flex-basis: 25px; width: 25px; }
-.item-details-button { padding: 4px 2px; border: 0; border-radius: 5px; color: inherit; background: transparent; text-align: left; }
+.item-details-button { padding: 9px 11px; border: 1px solid var(--shopping-border); border-radius: 8px; color: inherit; background: var(--shopping-surface); text-align: left; }
+.item-details-button:hover { border-color: var(--shopping-muted); }
+.item-details-button:focus-visible { outline: 2px solid var(--shopping-accent); outline-offset: 2px; }
 .item-details-button:hover .item-name { color: var(--shopping-accent); text-decoration: underline; text-underline-offset: 3px; }
 .new-item-row { padding-top: 8px; padding-bottom: 8px; }
-.new-item-inline-form { display: flex; flex: 1; min-width: 0; align-items: center; gap: 10px; }
+.new-item-inline-form { display: flex; flex: 1; min-width: 0; align-items: center; gap: 10px; padding: 0 10px; border: 1px solid var(--shopping-border); border-radius: 8px; background: var(--shopping-surface); }
+.new-item-inline-form:focus-within { outline: 2px solid var(--shopping-accent); outline-offset: 2px; }
+.new-item-inline-form input { padding: 9px 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.new-item-inline-form input:focus-visible { outline: none; }
 .new-item-inline-form .item-name-input { flex: 1; }
-.new-item-inline-form .quantity-input { flex: 0 0 88px; }
+.new-item-inline-form .quantity-input { flex: 0 0 88px; max-width: none; }
 .add-inline-button { flex: 0 0 36px; width: 36px; height: 36px; border: 0; border-radius: 8px; color: white; background: var(--shopping-accent); font-size: 1.35rem; line-height: 1; }
 .add-inline-button:disabled { opacity: .45; }
 .compact-empty-state { padding: 18px 8px; text-align: left; }
@@ -130,5 +135,5 @@ input:focus-visible, button:focus-visible { outline: 2px solid var(--shopping-ac
   .new-item-inline-form { gap: 6px; }
   .new-item-inline-form .quantity-input { flex-basis: 62px; }
   .item-primary-line { grid-template-columns: minmax(0, 1fr) 62px; gap: 6px; }
-  .add-inline-button { flex-basis: 34px; width: 34px; height: 34px; }
+  .item-primary-line { grid-template-columns: minmax(0, 1fr) 62px; gap: 6px; }
 }
