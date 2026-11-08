@@ -338,57 +338,45 @@ function App() {
                 </section>
               )}
 
-              <form className="add-item-form" onSubmit={submitItem}>
-                <label htmlFor="new-item">Add an item</label>
-                <div className="add-item-row">
-                  <input id="new-item" className="item-name-input" value={newItemName} onChange={(e) => setNewItemName(e.target.value)} placeholder="What do you need?" maxLength={255} />
-                  <input className="quantity-input" aria-label="Quantity" value={newQuantity} onChange={(e) => setNewQuantity(e.target.value)} placeholder="Qty" />
-                  <button className="primary-button add-item-button" type="submit" disabled={busy || !newItemName.trim()}>Add</button>
-                </div>
-                <div className="optional-fields">
-                  <input aria-label="Category" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} placeholder="Category (optional)" />
-                  <input aria-label="Note" value={newNote} onChange={(e) => setNewNote(e.target.value)} placeholder="Note (optional)" />
-                </div>
-              </form>
-
               <div className="items-heading">
                 <h3>Items</h3>
                 <span className="muted small">{items.length} total</span>
               </div>
-              {sortedItems.length ? (
-                <ul className="items-list">
-                  {sortedItems.map((item) => {
-                    const checked = item.checked === true || item.checked === 1;
-                    return (
-                      <li className={`item-row ${checked ? 'is-checked' : ''}`} key={item.id}>
-                        <button className="check-control" type="button" onClick={() => toggleItem(item)} aria-label={checked ? `Uncheck ${item.name}` : `Check off ${item.name}`} disabled={busy}>
-                          {checked ? '✓' : ''}
-                        </button>
-                        <div className="item-actions">
-                          <button className="text-button" type="button" onClick={() => setEditingItem({ ...item })} aria-label={`Edit ${item.name}`}>Edit</button>
-                          <button className="text-button danger-text" type="button" onClick={() => deleteItem(item)} aria-label={`Delete ${item.name}`} disabled={busy}>×</button>
-                        </div>
-                        <div className="item-content">
-                          <span className="item-name">{item.name}</span>
-                          {(item.quantity || item.category || item.note) && (
-                            <span className="item-meta">
-                              {item.quantity && <span className="item-quantity">{item.quantity}</span>}
-                              {item.category && <span>{item.category}</span>}
-                              {item.note && <span>{item.note}</span>}
-                            </span>
-                          )}
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              ) : (
-                <div className="empty-state">
-                  <div className="empty-illustration" aria-hidden="true">🛒</div>
-                  <h3>This list is ready</h3>
-                  <p>Add the things you need above. Shared members will see changes here too.</p>
+              {!sortedItems.length && (
+                <div className="empty-state compact-empty-state">
+                  <p>Your list is empty. Add your first item below.</p>
                 </div>
               )}
+              <ul className="items-list">
+                {sortedItems.map((item) => {
+                  const checked = item.checked === true || item.checked === 1;
+                  return (
+                    <li className={`item-row ${checked ? 'is-checked' : ''}`} key={item.id}>
+                      <button className="remove-item" type="button" onClick={() => deleteItem(item)} aria-label={`Remove ${item.name}`} disabled={busy}>×</button>
+                      <button className="check-control" type="button" onClick={() => toggleItem(item)} aria-label={checked ? `Uncheck ${item.name}` : `Check off ${item.name}`} disabled={busy}>
+                        {checked ? '✓' : ''}
+                      </button>
+                      <button className="item-content item-details-button" type="button" onClick={() => setEditingItem({ ...item })} aria-label={`Edit ${item.name}`}>
+                        <span className="item-name">{item.name}</span>
+                        {(item.quantity || item.category || item.note) && (
+                          <span className="item-meta">
+                            {item.quantity && <span className="item-quantity">{item.quantity}</span>}
+                            {item.category && <span>{item.category}</span>}
+                            {item.note && <span>{item.note}</span>}
+                          </span>
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
+                <li className="item-row new-item-row">
+                  <form className="new-item-inline-form" onSubmit={submitItem}>
+                    <input id="new-item" className="item-name-input" value={newItemName} onChange={(e) => setNewItemName(e.target.value)} placeholder="Add a new item…" maxLength={255} aria-label="New item name" />
+                    <input className="quantity-input" aria-label="New item quantity" value={newQuantity} onChange={(e) => setNewQuantity(e.target.value)} placeholder="Qty" />
+                    <button className="add-inline-button" type="submit" disabled={busy || !newItemName.trim()} aria-label="Add item">+</button>
+                  </form>
+                </li>
+              </ul>
             </>
           ) : (
             <div className="welcome-state">
