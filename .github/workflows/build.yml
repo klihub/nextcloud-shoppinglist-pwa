@@ -18,9 +18,39 @@ jobs:
         run: npm install
       - name: Build frontend
         run: npm run build
+      - name: Upload built frontend
+        uses: actions/upload-artifact@v4
+        with:
+          name: shoppinglist-frontend
+          path: |
+            js/main.js
+            js/main.css
+
   php-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Check PHP syntax
         run: find lib appinfo -name '*.php' -print0 | xargs -0 -n1 php -l
+
+  app-package:
+    needs: [frontend, php-lint]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: shoppinglist-frontend
+          path: js
+      - name: Assemble Nextcloud app package
+        run: |
+          mkdir -p package/shoppinglist
+          cp -R appinfo lib templates js package/shoppinglist/
+          cp composer.json manifest.webmanifest icon.svg sw.js package/shoppinglist/
+          cd package
+          zip -qr ../shoppinglist-app.zip shoppinglist
+      - name: Upload Nextcloud app package
+        uses: actions/upload-artifact@v4
+        with:
+          name: shoppinglist-nextcloud-app
+          path: shoppinglist-app.zip

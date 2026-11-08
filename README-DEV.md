@@ -15,10 +15,22 @@ app directory. These are loaded by `Util::addScript()` and
 Vite, but the app's authenticated API is normally exercised from a Nextcloud
 instance.
 
-The current interface supports list creation and selection, item creation,
+The responsive interface supports list creation and selection, item creation,
 editing, checking and deletion, and owner-managed sharing. It uses the
 existing Nextcloud browser session and CSRF token; there is no separate
 login.
+
+The app includes a web app manifest and a service worker that caches only
+static app-shell assets. It deliberately does not cache authenticated Nextcloud
+pages, API responses, or shopping-list data. Full offline list access and
+queued offline edits are not implemented yet.
+
+## Build and package
+
+Every push to `main` runs the frontend production build and PHP syntax
+checks. A successful run also publishes a downloadable
+`shoppinglist-nextcloud-app` artifact containing a ready-to-install app ZIP.
+The artifact is available from the run's GitHub Actions page.
 
 ## Nextcloud app
 
@@ -80,7 +92,7 @@ logged-in Nextcloud session and normal Nextcloud CSRF protection.
 
 ## Current validation status
 
-The API and responsive browser interface are committed. The frontend build
-and live Nextcloud 35 runtime still need validation. Progressive Web App
-installation and offline support are follow-up milestones. Do not treat this
-scaffold as a production-ready release yet.
+The frontend production build and PHP syntax checks pass in GitHub Actions.
+The app has not yet been installed or exercised against the live Nextcloud 35
+instance. Database migration and API runtime validation are still required
+before treating it as production-ready.
