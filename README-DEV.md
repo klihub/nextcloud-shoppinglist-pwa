@@ -27,32 +27,54 @@ migration automatically when the app is enabled or upgraded.
 - `shoppinglist_lists`: list name and owner.
 - `shoppinglist_members`: per-user membership and role; the owner is also
   represented as a member with role `owner`.
-- `shoppinglist_items`: list items, including quantity, note, category,
-  checked state, and ordering.
-
-The API currently supports listing, creating, reading, and deleting lists.
-Every read is scoped to the authenticated Nextcloud user. Deletion is owner-only.
-Membership management and item operations are not exposed yet.
+- `shoppinglist_items`: item name, quantity, note, category, checked state,
+  ordering, creator, and timestamps.
 
 ## API
 
-All routes are under the Nextcloud app route namespace:
+All routes are under the Nextcloud app route namespace. Requests use the
+logged-in Nextcloud session and normal Nextcloud CSRF protection.
 
-- `GET /apps/shoppinglist/api/lists`
-- `POST /apps/shoppinglist/api/lists` with form field `name`
-- `GET /apps/shoppinglist/api/lists/{id}`
-- `DELETE /apps/shoppinglist/api/lists/{id}`
+### Lists
 
-Requests use the logged-in Nextcloud session and normal Nextcloud CSRF
-protection. Do not disable CSRF protection for browser requests.
+- `GET /apps/shoppinglist/api/lists` — lists visible to the current user.
+- `POST /apps/shoppinglist/api/lists` — create a list; requires `name`.
+- `GET /apps/shoppinglist/api/lists/{id}` — retrieve one accessible list.
+- `DELETE /apps/shoppinglist/api/lists/{id}` — delete; owner only.
+
+### Sharing
+
+- `GET /apps/shoppinglist/api/lists/{id}/members` — list members; any member.
+- `POST /apps/shoppinglist/api/lists/{id}/members` — add an existing Nextcloud
+  user; requires `userId`; owner only.
+- `DELETE /apps/shoppinglist/api/lists/{id}/members/{userId}` — remove a
+  member; owner only. The owner cannot be removed.
+
+### Items
+
+- `GET /apps/shoppinglist/api/lists/{id}/items` — list items; any member.
+- `POST /apps/shoppinglist/api/lists/{id}/items` — create; requires `name`.
+  Optional fields: `quantity`, `note`, `category`, `sort_order`.
+- `PUT /apps/shoppinglist/api/lists/{id}/items/{itemId}` — update any supplied
+  fields among `name`, `quantity`, `note`, `category`, `checked`, and
+  `sort_order`. Send JSON booleans for `checked`.
+- `DELETE /apps/shoppinglist/api/lists/{id}/items/{itemId}` — delete.
 
 ## Security design
 
 - Nextcloud is the identity provider and authorization boundary.
 - The server derives the current user from `IUserSession`; clients cannot
   choose an owner or assert membership.
-- List membership is checked on every read.
-- Only the owner can delete a list.
-- Membership changes and item operations must enforce permissions server-side.
-- The PWA is a client of a reusable API; a future Android client must use the
+- Every list and item operation checks access to the parent list.
+- Only the owner can add/remove members or delete a list.
+- All members can collaboratively add, edit, check, and delete items.
+- Item IDs are always scoped to their list, preventing cross-list access.
+- The PWA is a client of a reusable API; a future Android client can use the
   same API and permission model.
+
+## Current validation status
+
+The API implementation is committed incrementally, but it has not yet been
+installed or exercised against a live Nextcloud 35 instance. Runtime
+validation, migration testing, and the production frontend build integration
+remain outstanding. Do not treat this scaffold as production-ready yet.
