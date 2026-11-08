@@ -434,10 +434,12 @@ function App() {
 
 if ('serviceWorker' in navigator && window.isSecureContext) {
   const serviceWorkerUrl = window.OC.generateUrl('/apps/shoppinglist/sw.js');
-  navigator.serviceWorker.register(serviceWorkerUrl).catch((error) => {
-    // The app remains fully usable if service-worker installation is blocked.
-    console.warn('Shopping List service worker registration failed', error);
-  });
+  navigator.serviceWorker.register(serviceWorkerUrl, { updateViaCache: 'none' })
+    .then((registration) => registration.update())
+    .catch((error) => {
+      // The app remains fully usable if service-worker installation is blocked.
+      console.warn('Shopping List service worker update failed', error);
+    });
 }
 
 const rootElement = document.getElementById('shoppinglist');
