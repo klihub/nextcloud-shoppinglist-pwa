@@ -72,3 +72,35 @@ jobs:
         with:
           name: shoppinglist-nextcloud-app
           path: shoppinglist-app.zip
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - uses: android-actions/setup-android@v3
+      - name: Install Android NDK
+        run: |
+          sdkmanager "ndk;27.2.12479018"
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/27.2.12479018" >> "$GITHUB_ENV"
+      - name: Install Go mobile tools
+        run: |
+          go install golang.org/x/mobile/cmd/gomobile@latest
+          go install golang.org/x/mobile/cmd/gobind@latest
+          gomobile init
+      - name: Build Go Android library
+        working-directory: go-client
+        run: |
+          mkdir -p ../android/app/libs
+          gomobile bind -target=android -javapkg=com.klihub.shoppinglist -o ../android/app/libs/mobilebridge.aar ./mobilebridge
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - name: Assemble Android app
+        run: gradle -p android assembleDebug
