@@ -13,7 +13,7 @@ A collaborative shopping-list application for Nextcloud, starting with an instal
 ## Initial scope
 
 - Create, rename, and delete lists.
-- Add, edit, delete, and check off items.
+- Add, edit, delete, and check off items. New items are entered in the final row of the item list; selecting an existing item opens its editor.
 - Item quantities and optional notes.
 - Basic item categories.
 - Share lists with other Nextcloud users.
