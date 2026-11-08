@@ -16,7 +16,7 @@ do not copy the development output into a live Nextcloud installation yet.
 
 ## Nextcloud app
 
-The app ID is `shoppinglist`, with PHP namespace `OCA\\ShoppingList`.
+The app ID is `shoppinglist`, with PHP namespace `OCA\ShoppingList`.
 Minimum supported Nextcloud version: 35.
 
 Install the app in a Nextcloud 35+ development instance. Nextcloud runs the
