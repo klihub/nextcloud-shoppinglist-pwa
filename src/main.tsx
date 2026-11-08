@@ -364,10 +364,12 @@ function App() {
                         {checked ? '✓' : ''}
                       </button>
                       <button className="item-content item-details-button" type="button" onClick={() => setEditingItem({ ...item })} aria-label={`Edit ${item.name}`}>
-                        <span className="item-name">{item.name}</span>
-                        {(item.quantity || item.category || item.note) && (
+                        <span className="item-primary-line">
+                          <span className="item-name">{item.name}</span>
+                          {item.quantity && <span className="item-quantity">{item.quantity}</span>}
+                        </span>
+                        {(item.category || item.note) && (
                           <span className="item-meta">
-                            {item.quantity && <span className="item-quantity">{item.quantity}</span>}
                             {item.category && <span>{item.category}</span>}
                             {item.note && <span>{item.note}</span>}
                           </span>
@@ -377,6 +379,8 @@ function App() {
                   );
                 })}
                 <li className="item-row new-item-row">
+                  <span className="row-control-spacer" aria-hidden="true" />
+                  <span className="row-control-spacer" aria-hidden="true" />
                   <form className="new-item-inline-form" onSubmit={submitItem}>
                     <input id="new-item" className="item-name-input" value={newItemName} onChange={(e) => setNewItemName(e.target.value)} placeholder="Add a new item…" maxLength={255} aria-label="New item name" />
                     <input className="quantity-input" aria-label="New item quantity" value={newQuantity} onChange={(e) => setNewQuantity(e.target.value)} placeholder="Qty" />
