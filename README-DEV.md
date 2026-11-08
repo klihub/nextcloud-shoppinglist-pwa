@@ -10,13 +10,13 @@ npm run dev
 npm run build
 ```
 
-The current Vite build is a standalone development build in `dist/`.
-The Nextcloud app integration will add a production asset-copy/build step;
-do not copy the development output into a live Nextcloud installation yet.
+The frontend is a React + TypeScript client of the Nextcloud app API. The
+production build is configured to emit `js/main.js` and `js/main.css`, which
+Nextcloud loads through `Util::addScript()` and `Util::addStyle()`.
 
 ## Nextcloud app
 
-The app ID is `shoppinglist`, with PHP namespace `OCA\ShoppingList`.
+The app ID is `shoppinglist`, with PHP namespace `OCA\\ShoppingList`.
 Minimum supported Nextcloud version: 35.
 
 Install the app in a Nextcloud 35+ development instance. Nextcloud runs the
@@ -74,7 +74,8 @@ logged-in Nextcloud session and normal Nextcloud CSRF protection.
 
 ## Current validation status
 
-The API implementation is committed incrementally, but it has not yet been
-installed or exercised against a live Nextcloud 35 instance. Runtime
-validation, migration testing, and the production frontend build integration
-remain outstanding. Do not treat this scaffold as production-ready yet.
+The API and first usable browser interface are implemented incrementally.
+The frontend build and live Nextcloud 35 runtime still need validation. The
+app is not yet a production-ready release. Progressive Web App installation
+and offline support are follow-up milestones; the current interface already
+uses the Nextcloud login session and works as a responsive web client.
