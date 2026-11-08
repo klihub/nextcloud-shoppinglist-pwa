@@ -14,7 +14,7 @@ Append it to the Nextcloud installation URL (including any installation subpath)
 
 Native clients must use a per-device Nextcloud app password, not the user's account password. The Android sign-in flow should use Nextcloud Login Flow v2 (`POST /index.php/login/v2`, open the returned `login` URL in the browser, then poll the returned `poll.endpoint` with its token). The successful poll returns `server`, `loginName`, and `appPassword`. Store the app password using Android's secure credential storage and provide it to the Go client. Do not log credentials or include them in URLs.
 
-The Go client authenticates API requests with HTTP Basic authentication using `loginName:appPassword`. This is the standard Nextcloud app-password authentication mechanism; confirm it against the target server during integration testing. The current PWA instead uses the logged-in browser session and sends the `requesttoken` CSRF header.
+The Go client authenticates API requests with HTTP Basic authentication using `loginName:appPassword` and sends `OCS-APIRequest: true`. This is the standard Nextcloud app-password authentication mechanism for this plain AppFramework controller on Nextcloud 30+. The current PWA instead uses the logged-in browser session and sends the `requesttoken` CSRF header.
 
 All API request and response bodies are JSON-compatible except request bodies, which use `application/x-www-form-urlencoded` fields. Responses are JSON. Successful deletes return HTTP 204 with no body.
 
@@ -54,3 +54,19 @@ Expected status codes include 400 for invalid input, 403 for forbidden owner-onl
 - Keep HTTP API calls, JSON models, and business rules in the Go package under `go-client/`.
 - Do not assume item ordering is stable beyond the server's returned order (unchecked first, then `sort_order`, then ID).
 - Offline writes and conflict resolution are not part of the current API contract.
+
+
+## Live API integration check
+
+A manual smoke test is available in `go-client/cmd/integration-test`. It creates a uniquely named temporary list, exercises list/member/item reads and item create/check/uncheck/delete operations, and removes the temporary list when it exits normally or after a check fails. Run it from the `go-client` directory:
+
+```sh
+export NEXTCLOUD_URL='https://nextcloud.example.com'
+export NEXTCLOUD_USER='your-login-name'
+read -rsp 'Nextcloud app password: ' NEXTCLOUD_APP_PASSWORD; echo
+export NEXTCLOUD_APP_PASSWORD
+go run ./cmd/integration-test
+unset NEXTCLOUD_APP_PASSWORD
+```
+
+Use a dedicated Nextcloud app password. The command does not print credentials. If it is forcibly terminated or the network disappears during cleanup, a temporary list named `API integration test ...` may remain and can be deleted manually.
