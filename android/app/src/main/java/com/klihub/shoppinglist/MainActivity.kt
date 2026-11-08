@@ -94,8 +94,8 @@ class MainActivity : ComponentActivity() {
                 val credentials = withContext(Dispatchers.IO) {
                     LoginFlowV2().pollUntilAuthorized(flow)
                 }
-                withContext(Dispatchers.IO) { credentialStore.save(credentials) }
                 verifyCredentials(credentials)
+                withContext(Dispatchers.IO) { credentialStore.save(credentials) }
             } catch (error: Exception) {
                 status = error.message ?: "Sign-in failed."
             } finally {
