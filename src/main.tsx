@@ -1,4 +1,5 @@
-import React, { FormEvent, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import type { FormEvent } from 'react';
 import { createRoot } from 'react-dom/client';
 import './style.css';
 
