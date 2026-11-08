@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<info>
+  <id>shoppinglist</id>
+  <name>Shopping List</name>
+  <summary>Collaborative shopping lists</summary>
+  <description>Create and share shopping lists with other Nextcloud users.</description>
+  <version>0.1.0</version>
+  <licence>agpl</licence>
+  <author>Klihub</author>
+  <namespace>ShoppingList</namespace>
+  <category>organization</category>
+  <dependencies>
+    <nextcloud min-version="35" />
+  </dependencies>
+</info>
