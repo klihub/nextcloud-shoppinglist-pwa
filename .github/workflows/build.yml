@@ -45,7 +45,7 @@ jobs:
       - name: Assemble Nextcloud app package
         run: |
           mkdir -p package/shoppinglist
-          cp -R appinfo lib templates js package/shoppinglist/
+          cp -R appinfo lib templates js img package/shoppinglist/
           cp composer.json manifest.webmanifest icon.svg sw.js package/shoppinglist/
           cd package
           zip -qr ../shoppinglist-app.zip shoppinglist
