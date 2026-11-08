@@ -1,7 +1,7 @@
-const CACHE_NAME = 'shoppinglist-shell-v1';
+const CACHE_NAME = 'shoppinglist-shell-v2';
 const SHELL_ASSETS = [
   './js/main.js',
-  './js/main.css',
+  './css/main.css',
   './icon.svg',
   './manifest.webmanifest',
 ];
@@ -33,7 +33,7 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(request.url);
   const isAppAsset = url.pathname.endsWith('/js/main.js')
-    || url.pathname.endsWith('/js/main.css')
+    || url.pathname.endsWith('/css/main.css')
     || url.pathname.endsWith('/icon.svg')
     || url.pathname.endsWith('/manifest.webmanifest');
   if (!isAppAsset) return;
