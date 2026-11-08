@@ -15,11 +15,11 @@ gomobile init
 Build the AAR from the Go module:
 
 ```sh
-cd go-client
-gomobile bind -target=android -javapkg=com.klihub.shoppinglist -o ../android/app/libs/mobilebridge.aar ./mobilebridge
+cd go-client/mobilebridge
+gomobile bind -target=android -javapkg=com.klihub.shoppinglist -o ../../android/app/libs/mobilebridge.aar .
 ```
 
-The generated AAR is a build artifact and is intentionally not committed. Rebuild it whenever the Go client or mobile bridge changes.
+The generated AAR is a build artifact and is intentionally not committed. The mobilebridge submodule pins the gomobile library/tool dependency independently of the Go client module's minimum Go version. Rebuild the AAR whenever the Go client or mobile bridge changes.
 
 ## Build the Android app
 
