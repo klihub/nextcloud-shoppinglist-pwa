@@ -31,9 +31,18 @@ This repository contains two parts:
 
 The Nextcloud app owns authorization and data access. The browser client must never be trusted to enforce list permissions.
 
-## Development status
+## Development and build
 
-Initial project setup. Implementation and development instructions will be added incrementally.
+The frontend is built with:
+
+```sh
+npm install
+npm run build
+```
+
+GitHub Actions runs the frontend build and PHP syntax checks on every push to `main`. The packaging job combines the compiled JavaScript and stylesheet with the Nextcloud app files and publishes a `shoppinglist-nextcloud-app` artifact containing `shoppinglist-app.zip`.
+
+The compiled frontend assets are placed in the app's `js/` and `css/` directories, respectively.
 
 ## Requirements
 
