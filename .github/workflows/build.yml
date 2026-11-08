@@ -40,7 +40,7 @@ jobs:
       - name: Test Go client
         working-directory: go-client
         run: |
-          gofmt -w client.go client_test.go
+          gofmt -w client.go client_test.go mobilebridge/bridge.go cmd/integration-test/main.go
           go vet ./...
           go test -race ./...
 
