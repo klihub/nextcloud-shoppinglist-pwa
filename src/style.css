@@ -82,7 +82,7 @@ input:focus-visible, button:focus-visible { outline: 2px solid var(--shopping-ac
 .remove-item { display: grid; place-items: center; flex: 0 0 28px; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 7px; color: var(--shopping-muted); background: transparent; font-size: 1.25rem; line-height: 1; }
 .remove-item:hover { color: var(--color-error, #b42318); background: var(--shopping-soft); }
 .item-content { display: grid; flex: 1; min-width: 0; gap: 5px; }
-.item-primary-line { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px; }
+.item-primary-line { display: grid; grid-template-columns: minmax(0, 1fr) 88px; align-items: baseline; gap: 10px; }
 .item-primary-line .item-name { min-width: 0; }
 .row-control-spacer { flex: 0 0 28px; width: 28px; }
 .row-control-spacer + .row-control-spacer { flex-basis: 25px; width: 25px; }
@@ -99,7 +99,9 @@ input:focus-visible, button:focus-visible { outline: 2px solid var(--shopping-ac
 .item-name { overflow-wrap: anywhere; }
 .is-checked .item-name { color: var(--shopping-muted); text-decoration: line-through; }
 .item-meta { display: flex; flex-wrap: wrap; gap: 12px; color: var(--shopping-muted); font-size: .76rem; }
-.item-primary-line .item-quantity { flex: 0 0 auto; font-size: .82rem; font-weight: 650; color: var(--shopping-muted); }
+.item-primary-line .item-quantity { min-height: 1em; font-size: .82rem; font-weight: 650; color: var(--shopping-muted); overflow-wrap: anywhere; }
+.new-item-inline-form .item-name-input { flex: 1; }
+.new-item-inline-form .quantity-input { flex: 0 0 88px; max-width: none; }
 .item-meta span + span::before { content: "·"; margin-right: 12px; }
 .empty-state, .welcome-state { padding: 46px 18px; text-align: center; color: var(--shopping-muted); }
 .empty-state h3, .welcome-state h2 { margin: 12px 0 6px; color: inherit; }
@@ -127,5 +129,6 @@ input:focus-visible, button:focus-visible { outline: 2px solid var(--shopping-ac
   .item-row { gap: 8px; }
   .new-item-inline-form { gap: 6px; }
   .new-item-inline-form .quantity-input { flex-basis: 62px; }
+  .item-primary-line { grid-template-columns: minmax(0, 1fr) 62px; gap: 6px; }
   .add-inline-button { flex-basis: 34px; width: 34px; height: 34px; }
 }
