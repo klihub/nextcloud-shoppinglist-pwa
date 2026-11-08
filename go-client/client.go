@@ -141,6 +141,9 @@ func (c *Client) request(ctx context.Context, method, path string, form url.Valu
 	}
 	req.SetBasicAuth(c.login, c.password)
 	req.Header.Set("Accept", "application/json")
+	// Nextcloud 30+ accepts this header on plain AppFramework controllers
+	// as an API request, allowing app-password clients without browser CSRF tokens.
+	req.Header.Set("OCS-APIRequest", "true")
 	if form != nil {
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
 	}
