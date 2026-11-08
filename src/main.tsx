@@ -32,6 +32,7 @@ type ShoppingItem = {
 
 type Member = {
   user_id: string;
+  display_name?: string;
   role: 'owner' | 'member';
 };
 
@@ -313,8 +314,11 @@ function App() {
                   <ul className="member-list">
                     {members.map((member) => (
                       <li key={member.user_id}>
-                        <span className="avatar" aria-hidden="true">{member.user_id.slice(0, 1).toUpperCase()}</span>
-                        <span className="member-name">{member.user_id}</span>
+                        <span className="avatar" aria-hidden="true">{(member.display_name || member.user_id).slice(0, 1).toUpperCase()}</span>
+                        <span className="member-identity">
+                          <span className="member-name">{member.display_name || member.user_id}</span>
+                          <span className="member-user-id">{member.user_id}</span>
+                        </span>
                         <span className="role-label">{member.role === 'owner' ? 'Owner' : 'Member'}</span>
                         {activeList.role === 'owner' && member.role !== 'owner' && (
                           <button className="text-button danger-text" type="button" onClick={() => removeMember(member.user_id)} disabled={busy}>Remove</button>
