@@ -107,7 +107,7 @@ class MainActivity : ComponentActivity() {
     private suspend fun verifyCredentials(credentials: AccountCredentials) {
         status = "Verifying the new app password…"
         val count = withContext(Dispatchers.IO) {
-            val client = Mobilebridge.newClient(
+            val client = Mobilebridge.openClient(
                 credentials.server,
                 credentials.loginName,
                 credentials.appPassword,
