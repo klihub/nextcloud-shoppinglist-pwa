@@ -11,6 +11,9 @@ import (
 
 func TestListListsUsesAppPasswordAndDecodesResponse(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("OCS-APIRequest") != "true" {
+			t.Fatalf("missing OCS-APIRequest header")
+		}
 		if r.URL.Path != "/cloud/index.php/apps/shoppinglist/api/lists" {
 			t.Fatalf("unexpected path: %s", r.URL.Path)
 		}
