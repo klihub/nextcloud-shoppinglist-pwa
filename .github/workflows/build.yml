@@ -96,7 +96,10 @@ jobs:
           sdkmanager "ndk;27.2.12479018"
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/27.2.12479018" >> "$GITHUB_ENV"
       - name: Install Go mobile tools
+        working-directory: go-client/mobilebridge
         run: |
+          go get -tool golang.org/x/mobile/cmd/gobind
+          go list -f '{{.Name}} {{.Dir}}' golang.org/x/mobile/bind
           go install golang.org/x/mobile/cmd/gomobile@latest
           go install golang.org/x/mobile/cmd/gobind@latest
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
