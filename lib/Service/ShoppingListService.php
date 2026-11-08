@@ -259,7 +259,7 @@ final class ShoppingListService {
             'quantity' => $qb->createNamedParameter($quantity === '' ? null : $quantity),
             'note' => $qb->createNamedParameter($note === '' ? null : $note),
             'category' => $qb->createNamedParameter($category === '' ? null : $category),
-            'checked' => $qb->createNamedParameter(false),
+            'checked' => $qb->createNamedParameter(false, \PDO::PARAM_BOOL),
             'sort_order' => $qb->createNamedParameter((int)($data['sort_order'] ?? 0)),
             'created_by' => $qb->createNamedParameter($uid),
             'created_at' => $qb->createNamedParameter($now),
