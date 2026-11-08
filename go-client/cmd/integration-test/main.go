@@ -13,17 +13,23 @@ import (
 )
 
 func main() {
+	if err := run(); err != nil {
+		fmt.Fprintln(os.Stderr, "FAIL:", err)
+		os.Exit(1)
+	}
+}
+
+func run() error {
 	serverURL := strings.TrimSpace(os.Getenv("NEXTCLOUD_URL"))
 	login := os.Getenv("NEXTCLOUD_USER")
 	password := os.Getenv("NEXTCLOUD_APP_PASSWORD")
 	if serverURL == "" || login == "" || password == "" {
-		fmt.Fprintln(os.Stderr, "Set NEXTCLOUD_URL, NEXTCLOUD_USER, and NEXTCLOUD_APP_PASSWORD.")
-		os.Exit(2)
+		return fmt.Errorf("set NEXTCLOUD_URL, NEXTCLOUD_USER, and NEXTCLOUD_APP_PASSWORD")
 	}
 
 	client, err := shoppinglist.NewClient(serverURL, login, password)
 	if err != nil {
-		fail("configure client", err)
+		return fmt.Errorf("configure client: %w", err)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
@@ -31,13 +37,13 @@ func main() {
 
 	lists, err := client.ListLists(ctx)
 	if err != nil {
-		fail("list existing lists", err)
+		return fmt.Errorf("list existing lists: %w", err)
 	}
 	fmt.Printf("Authentication OK; %d existing list(s) visible.\n", len(lists))
 
 	list, err := client.CreateList(ctx, fmt.Sprintf("API integration test %d", time.Now().UnixNano()))
 	if err != nil {
-		fail("create temporary list", err)
+		return fmt.Errorf("create temporary list: %w", err)
 	}
 	fmt.Printf("Created temporary list %d.\n", list.ID)
 
@@ -59,15 +65,15 @@ func main() {
 
 	gotList, err := client.GetList(ctx, list.ID)
 	if err != nil {
-		fail("get temporary list", err)
+		return fmt.Errorf("get temporary list: %w", err)
 	}
 	if gotList.ID != list.ID {
-		fail("verify temporary list", fmt.Errorf("got list ID %d, want %d", gotList.ID, list.ID))
+		return fmt.Errorf("verify temporary list: got ID %d, want %d", gotList.ID, list.ID)
 	}
 
 	members, err := client.ListMembers(ctx, list.ID)
 	if err != nil {
-		fail("list members", err)
+		return fmt.Errorf("list members: %w", err)
 	}
 	fmt.Printf("List read OK; %d member(s).\n", len(members))
 
@@ -79,46 +85,42 @@ func main() {
 		Category: &category,
 	})
 	if err != nil {
-		fail("create item", err)
+		return fmt.Errorf("create item: %w", err)
 	}
 	itemID = item.ID
 	fmt.Printf("Created item %d.\n", item.ID)
 
 	items, err := client.ListItems(ctx, list.ID)
 	if err != nil {
-		fail("list items", err)
+		return fmt.Errorf("list items: %w", err)
 	}
 	if len(items) != 1 || items[0].ID != item.ID {
-		fail("verify item listing", fmt.Errorf("expected only item %d, got %d item(s)", item.ID, len(items)))
+		return fmt.Errorf("verify item listing: expected only item %d, got %d item(s)", item.ID, len(items))
 	}
 
 	checked := true
 	item, err = client.UpdateItem(ctx, list.ID, item.ID, shoppinglist.ItemUpdate{Checked: &checked})
 	if err != nil {
-		fail("check item", err)
+		return fmt.Errorf("check item: %w", err)
 	}
 	if !bool(item.Checked) {
-		fail("verify checked item", fmt.Errorf("server returned checked=false"))
+		return fmt.Errorf("verify checked item: server returned checked=false")
 	}
 
 	checked = false
 	item, err = client.UpdateItem(ctx, list.ID, item.ID, shoppinglist.ItemUpdate{Checked: &checked})
 	if err != nil {
-		fail("uncheck item", err)
+		return fmt.Errorf("uncheck item: %w", err)
 	}
 	if bool(item.Checked) {
-		fail("verify unchecked item", fmt.Errorf("server returned checked=true"))
+		return fmt.Errorf("verify unchecked item: server returned checked=true")
 	}
 
 	if err := client.DeleteItem(ctx, list.ID, item.ID); err != nil {
-		fail("delete item", err)
+		return fmt.Errorf("delete item: %w", err)
 	}
 	itemID = 0
 	fmt.Println("Item create/read/check/uncheck/delete OK.")
 	fmt.Println("All API integration checks passed.")
-}
-
-func fail(operation string, err error) {
-	fmt.Fprintf(os.Stderr, "FAIL: %s: %v\n", operation, err)
-	os.Exit(1)
+	return nil
 }
