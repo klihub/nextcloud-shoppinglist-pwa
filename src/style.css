@@ -19,6 +19,7 @@ button { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .55; }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 8px 0 22px; border-bottom: 1px solid var(--shopping-border); }
 .topbar h1 { margin: 2px 0 0; font-size: clamp(1.55rem, 3vw, 2rem); letter-spacing: -.035em; }
+.build-marker { display: inline-block; margin-left: 8px; padding: 3px 7px; border: 1px solid var(--shopping-accent); border-radius: 5px; color: var(--shopping-accent); font-size: .62rem; font-weight: 750; letter-spacing: .06em; vertical-align: middle; }
 .eyebrow { margin: 0; color: var(--shopping-muted); font-size: .75rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
 .account-pill, .count, .role-label { border-radius: 999px; background: var(--shopping-soft); color: var(--shopping-muted); padding: 5px 10px; font-size: .78rem; }
 .notice { margin: 16px 0; padding: 12px 14px; border-radius: 8px; }
