@@ -49,6 +49,7 @@ input:focus-visible, button:focus-visible { outline: 2px solid var(--shopping-ac
 .toolbar { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
 .primary-button, .secondary-button { border-radius: 8px; padding: 10px 14px; font-weight: 650; }
 .primary-button { border: 1px solid var(--shopping-accent); color: white; background: var(--shopping-accent); }
+.danger-confirm-button { border-color: var(--color-error, #b42318); background: var(--color-error, #b42318); }
 .secondary-button { border: 1px solid var(--shopping-border); color: inherit; background: var(--shopping-surface); }
 .secondary-button.active { border-color: var(--shopping-accent); color: var(--shopping-accent); }
 .quiet-danger, .text-button { border: 0; color: var(--shopping-muted); background: transparent; padding: 8px; }
