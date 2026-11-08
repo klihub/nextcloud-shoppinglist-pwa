@@ -108,7 +108,7 @@ jobs:
         working-directory: go-client/mobilebridge
         run: |
           mkdir -p ../../android/app/libs
-          gomobile bind -target=android -javapkg=com.klihub.shoppinglist -o ../../android/app/libs/mobilebridge.aar .
+          gomobile bind -target=android -androidapi=21 -javapkg=com.klihub.shoppinglist -o ../../android/app/libs/mobilebridge.aar .
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
