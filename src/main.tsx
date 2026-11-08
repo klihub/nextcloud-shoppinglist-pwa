@@ -366,7 +366,7 @@ function App() {
                       <button className="item-content item-details-button" type="button" onClick={() => setEditingItem({ ...item })} aria-label={`Edit ${item.name}`}>
                         <span className="item-primary-line">
                           <span className="item-name">{item.name}</span>
-                          {item.quantity && <span className="item-quantity">{item.quantity}</span>}
+                          <span className="item-quantity">{item.quantity || ''}</span>
                         </span>
                         {(item.category || item.note) && (
                           <span className="item-meta">
