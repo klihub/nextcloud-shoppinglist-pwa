@@ -9,6 +9,14 @@
   <author>Klihub</author>
   <namespace>ShoppingList</namespace>
   <category>organization</category>
+  <navigations>
+    <navigation>
+      <name>Shopping List</name>
+      <route>shoppinglist.page.index</route>
+      <icon>app.svg</icon>
+      <order>50</order>
+    </navigation>
+  </navigations>
   <dependencies>
     <nextcloud min-version="35" />
   </dependencies>
