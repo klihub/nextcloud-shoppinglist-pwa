@@ -330,7 +330,10 @@ final class ShoppingListService {
                 }
                 $value = (int)$value;
             }
-            $qb->set($field, $qb->createNamedParameter($value));
+            $parameter = $field === 'checked'
+                ? $qb->createNamedParameter($value, \PDO::PARAM_BOOL)
+                : $qb->createNamedParameter($value);
+            $qb->set($field, $parameter);
         }
         $qb->set('updated_at', $qb->createNamedParameter($this->now()))
             ->where($qb->expr()->eq('list_id', $qb->createNamedParameter($listId)))
