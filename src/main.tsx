@@ -80,6 +80,7 @@ function App() {
   const [newMemberId, setNewMemberId] = useState('');
   const [editingItem, setEditingItem] = useState<ShoppingItem | null>(null);
   const [showSharing, setShowSharing] = useState(false);
+  const [confirmDeleteList, setConfirmDeleteList] = useState(false);
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -207,7 +208,7 @@ function App() {
   }
 
   function deleteItem(item: ShoppingItem) {
-    if (!activeList || !window.confirm(`Remove “${item.name}” from this list?`)) return;
+    if (!activeList) return;
     void perform(async () => {
       await api(`/lists/${activeList.id}/items/${item.id}`, 'DELETE');
       await loadListData(activeList.id);
@@ -215,9 +216,15 @@ function App() {
   }
 
   function deleteList() {
-    if (!activeList || !window.confirm(`Delete the list “${activeList.name}” and all its items?`)) return;
+    if (!activeList) return;
+    setConfirmDeleteList(true);
+  }
+
+  function confirmListDeletion() {
+    if (!activeList) return;
     void perform(async () => {
       await api(`/lists/${activeList.id}`, 'DELETE');
+      setConfirmDeleteList(false);
       setShowSharing(false);
       await loadLists();
     });
@@ -387,6 +394,19 @@ function App() {
           )}
         </section>
       </div>
+
+      {confirmDeleteList && activeList && (
+        <div className="modal-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && setConfirmDeleteList(false)}>
+          <section className="edit-dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-list-title" aria-describedby="delete-list-description">
+            <h2 id="delete-list-title">Delete list?</h2>
+            <p id="delete-list-description">Delete “{activeList.name}” and all its items? This cannot be undone.</p>
+            <div className="dialog-actions">
+              <button className="secondary-button" type="button" onClick={() => setConfirmDeleteList(false)} disabled={busy}>Cancel</button>
+              <button className="primary-button danger-confirm-button" type="button" onClick={confirmListDeletion} disabled={busy}>Delete list</button>
+            </div>
+          </section>
+        </div>
+      )}
 
       {editingItem && (
         <div className="modal-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && setEditingItem(null)}>
