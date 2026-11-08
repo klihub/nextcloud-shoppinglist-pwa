@@ -18,13 +18,17 @@ jobs:
         run: npm install
       - name: Build frontend
         run: npm run build
+      - name: Prepare Nextcloud stylesheet path
+        run: |
+          mkdir -p css
+          cp js/main.css css/main.css
       - name: Upload built frontend
         uses: actions/upload-artifact@v4
         with:
           name: shoppinglist-frontend
           path: |
             js/main.js
-            js/main.css
+            css/main.css
 
   php-lint:
     runs-on: ubuntu-latest
@@ -45,7 +49,7 @@ jobs:
       - name: Assemble Nextcloud app package
         run: |
           mkdir -p package/shoppinglist
-          cp -R appinfo lib templates js img package/shoppinglist/
+          cp -R appinfo lib templates js css img package/shoppinglist/
           cp composer.json manifest.webmanifest icon.svg sw.js package/shoppinglist/
           cd package
           zip -qr ../shoppinglist-app.zip shoppinglist
