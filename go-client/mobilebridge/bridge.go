@@ -16,7 +16,7 @@ type Client struct {
 }
 
 // NewClient creates an authenticated API client using a Nextcloud app password.
-func NewClient(serverURL, loginName, appPassword string) (*Client, error) {
+func OpenClient(serverURL, loginName, appPassword string) (*Client, error) {
 	client, err := shoppinglist.NewClient(serverURL, loginName, appPassword)
 	if err != nil {
 		return nil, err
