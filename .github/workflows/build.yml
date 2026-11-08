@@ -45,7 +45,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: shoppinglist-frontend
-          path: js
+          path: .
       - name: Assemble Nextcloud app package
         run: |
           mkdir -p package/shoppinglist
