@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'android/**']
   pull_request:
     branches: [main]
 
@@ -29,6 +29,20 @@ jobs:
           path: |
             js/main.js
             css/main.css
+
+  go-client:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+      - name: Test Go client
+        working-directory: go-client
+        run: |
+          gofmt -w client.go client_test.go
+          go vet ./...
+          go test -race ./...
 
   php-lint:
     runs-on: ubuntu-latest
