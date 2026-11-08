@@ -9,6 +9,8 @@ Install Go, the Android SDK and NDK, then install the mobile tools:
 ```sh
 go install golang.org/x/mobile/cmd/gomobile@latest
 go install golang.org/x/mobile/cmd/gobind@latest
+cd go-client/mobilebridge
+go get -tool golang.org/x/mobile/cmd/gobind
 gomobile init
 ```
 
