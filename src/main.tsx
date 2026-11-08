@@ -260,7 +260,7 @@ function App() {
       <header className="topbar">
         <div>
           <p className="eyebrow">Shared household lists</p>
-          <h1>Shopping List</h1>
+          <h1>Shopping List <span className="build-marker">UI CHECK 01</span></h1>
         </div>
         <span className="account-pill">Nextcloud</span>
       </header>
