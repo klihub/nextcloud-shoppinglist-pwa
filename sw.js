@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shoppinglist-shell-v2';
+const CACHE_NAME = 'shoppinglist-shell-v3';
 const SHELL_ASSETS = [
   './js/main.js',
   './css/main.css',
