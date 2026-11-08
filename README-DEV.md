@@ -6,13 +6,19 @@ Requirements: Node.js 20+ and npm.
 
 ```sh
 npm install
-npm run dev
 npm run build
 ```
 
-The frontend is a React + TypeScript client of the Nextcloud app API. The
-production build is configured to emit `js/main.js` and `js/main.css`, which
-Nextcloud loads through `Util::addScript()` and `Util::addStyle()`.
+The build emits `js/main.js` and `js/main.css` directly into the Nextcloud
+app directory. These are loaded by `Util::addScript()` and
+`Util::addStyle()`. For local frontend development, `npm run dev` starts
+Vite, but the app's authenticated API is normally exercised from a Nextcloud
+instance.
+
+The current interface supports list creation and selection, item creation,
+editing, checking and deletion, and owner-managed sharing. It uses the
+existing Nextcloud browser session and CSRF token; there is no separate
+login.
 
 ## Nextcloud app
 
@@ -57,7 +63,7 @@ logged-in Nextcloud session and normal Nextcloud CSRF protection.
   Optional fields: `quantity`, `note`, `category`, `sort_order`.
 - `PUT /apps/shoppinglist/api/lists/{id}/items/{itemId}` — update any supplied
   fields among `name`, `quantity`, `note`, `category`, `checked`, and
-  `sort_order`. Send JSON booleans for `checked`.
+  `sort_order`. Send boolean values for `checked`.
 - `DELETE /apps/shoppinglist/api/lists/{id}/items/{itemId}` — delete.
 
 ## Security design
@@ -69,13 +75,12 @@ logged-in Nextcloud session and normal Nextcloud CSRF protection.
 - Only the owner can add/remove members or delete a list.
 - All members can collaboratively add, edit, check, and delete items.
 - Item IDs are always scoped to their list, preventing cross-list access.
-- The PWA is a client of a reusable API; a future Android client can use the
-  same API and permission model.
+- The frontend is a client of a reusable API; a future Android client can use
+  the same API and permission model.
 
 ## Current validation status
 
-The API and first usable browser interface are implemented incrementally.
-The frontend build and live Nextcloud 35 runtime still need validation. The
-app is not yet a production-ready release. Progressive Web App installation
-and offline support are follow-up milestones; the current interface already
-uses the Nextcloud login session and works as a responsive web client.
+The API and responsive browser interface are committed. The frontend build
+and live Nextcloud 35 runtime still need validation. Progressive Web App
+installation and offline support are follow-up milestones. Do not treat this
+scaffold as a production-ready release yet.
