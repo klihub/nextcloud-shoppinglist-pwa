@@ -2,7 +2,6 @@
 package shoppinglist
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -250,5 +249,3 @@ func (c *Client) DeleteItem(ctx context.Context, listID, itemID int64) error {
 
 func listPath(id int64) string { return "/lists/" + strconv.FormatInt(id, 10) }
 
-// Ensure the compiler catches accidental changes to request body handling.
-var _ = bytes.MinRead
