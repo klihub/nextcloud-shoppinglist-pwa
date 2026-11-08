@@ -384,7 +384,6 @@ function App() {
                   <form className="new-item-inline-form" onSubmit={submitItem}>
                     <input id="new-item" className="item-name-input" value={newItemName} onChange={(e) => setNewItemName(e.target.value)} placeholder="Add a new item…" maxLength={255} aria-label="New item name" />
                     <input className="quantity-input" aria-label="New item quantity" value={newQuantity} onChange={(e) => setNewQuantity(e.target.value)} placeholder="Qty" />
-                    <button className="add-inline-button" type="submit" disabled={busy || !newItemName.trim()} aria-label="Add item">+</button>
                   </form>
                 </li>
               </ul>
