@@ -38,7 +38,7 @@ final class ShoppingListService {
             ))
             ->orderBy('l.updated_at', 'DESC');
 
-        return $qb->executeQuery()->fetchAll();
+        return $qb->executeQuery()->fetchAllAssociative();
     }
 
     /** @return array<string, mixed> */
