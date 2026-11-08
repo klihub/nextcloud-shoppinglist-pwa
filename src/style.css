@@ -119,7 +119,7 @@ input:focus-visible, button:focus-visible { outline: 2px solid var(--shopping-ac
 .edit-dialog label { display: grid; gap: 6px; font-size: .84rem; font-weight: 650; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 8px; }
 @media (max-width: 720px) {
-  .shopping-app { padding: 12px 12px 32px; }
+  .shopping-app { padding: 12px 12px calc(88px + env(safe-area-inset-bottom, 0px)); }
   .workspace { grid-template-columns: 1fr; gap: 26px; padding-top: 18px; }
   .sidebar { padding-bottom: 18px; border-bottom: 1px solid var(--shopping-border); }
   .list-nav { display: flex; overflow-x: auto; padding-bottom: 4px; }
